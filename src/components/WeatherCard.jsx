@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getWeatherData } from '../services/api';
+import dayjs from 'dayjs';
 import '../css/WeatherCard.css';
 
 function WeatherCard() {
+    const [data, setData] = useState({});
+    const [location, setLocation] = useState('');
     const [showChangeLocation, setShowChangeLocation] = useState(false);
-    const [city, setCity] = useState('');
 
     const changeLocation = (e) => {
         e.preventDefault();
@@ -13,19 +15,40 @@ function WeatherCard() {
         return;
     };
 
+    const searchLocation = async () => {
+        const weatherData = await getWeatherData(location);
+        setData(weatherData);
+        setLocation('');
+        setShowChangeLocation(false);
+    };
+
+    useEffect(() => {
+        const fetchDefaultWeather = async () => {
+            ``;
+            const weatherData = await getWeatherData('London');
+            setData(weatherData);
+        };
+
+        if (Object.keys(data).length === 0) {
+            fetchDefaultWeather();
+        }
+    }, [data]);
+
     return (
         <div className='weather-card'>
             <div className='left'>
                 <div className='date-info'>
-                    <h2>Tuesday</h2>
-                    <p>20 Jun 2022</p>
-                    <p className='location'>📍 Biarritz, FR</p>
+                    <h2>{dayjs().format('dddd')}</h2>
+                    <p>{dayjs().format('DD MMM YYYY')}</p>
+                    <p className='location'>
+                        📍 {data.name}, {data.country}
+                    </p>
                 </div>
 
                 <div className='temp-info'>
                     <div className='icon'>☀️</div>
-                    <h1>29°C</h1>
-                    <p>Sunny</p>
+                    <h1>{data.temperature}°C</h1>
+                    <p>{data.weather}</p>
                 </div>
             </div>
 
@@ -35,10 +58,10 @@ function WeatherCard() {
                         <strong>PRECIPITATION</strong> 0%
                     </p>
                     <p>
-                        <strong>HUMIDITY</strong> 42%
+                        <strong>HUMIDITY</strong> {data.humidity}%
                     </p>
                     <p>
-                        <strong>WIND</strong> 3 km/h
+                        <strong>WIND</strong> {data.wind} km/h
                     </p>
                 </div>
 
@@ -67,17 +90,11 @@ function WeatherCard() {
                 {showChangeLocation && (
                     <div className='modal'>
                         <input
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
                             placeholder='Enter city...'
                         />
-                        <button
-                            onClick={() => {
-                                getWeatherData(city);
-                            }}
-                        >
-                            Search
-                        </button>
+                        <button onClick={searchLocation}>Search</button>
                     </div>
                 )}
             </div>

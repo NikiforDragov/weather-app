@@ -8,11 +8,12 @@ export const getWeatherData = async (city) => {
     const data = await response.json();
 
     const result = {
+        name: data.name,
+        temperature: data.main.temp,
         wind: data.wind.speed,
         humidity: data.main.humidity,
         country: data.sys.country,
         weather: data.weather[0].main
     };
-    console.log(result);
     return result;
 };
