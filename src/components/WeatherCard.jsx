@@ -1,6 +1,18 @@
+import { useState } from 'react';
+import { getWeatherData } from '../services/api';
 import '../css/WeatherCard.css';
 
 function WeatherCard() {
+    const [showChangeLocation, setShowChangeLocation] = useState(false);
+    const [city, setCity] = useState('');
+
+    const changeLocation = (e) => {
+        e.preventDefault();
+        if (!showChangeLocation) setShowChangeLocation(true);
+        else setShowChangeLocation(false);
+        return;
+    };
+
     return (
         <div className='weather-card'>
             <div className='left'>
@@ -49,7 +61,25 @@ function WeatherCard() {
                     </div>
                 </div>
 
-                <button className='change-location'>📍 Change Location</button>
+                <button className='change-location' onClick={changeLocation}>
+                    📍 Change Location
+                </button>
+                {showChangeLocation && (
+                    <div className='modal'>
+                        <input
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder='Enter city...'
+                        />
+                        <button
+                            onClick={() => {
+                                getWeatherData(city);
+                            }}
+                        >
+                            Search
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
