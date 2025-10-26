@@ -3,13 +3,14 @@ body,
 #root {
     height: 100%;
     margin: 0;
-    padding: 0;
+    background-color: #2f3b4c;
+    font-family: 'Poppins', sans-serif;
+    color: white;
 }
 
 .main-content {
     height: 100vh;
-    background-color: #343d4b;
     display: flex;
     justify-content: center;
-    text-align: center;
+    align-items: center;
 }
