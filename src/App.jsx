@@ -1,9 +1,7 @@
-function App() {
-  return (
-    <>
+import './css/App.css';
 
-    </>
-  )
+function App() {
+    return <main className='main-content'></main>;
 }
 
-export default App
+export default App;
