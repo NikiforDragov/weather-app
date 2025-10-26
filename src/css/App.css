@@ -9,4 +9,7 @@ body,
 .main-content {
     height: 100vh;
     background-color: #343d4b;
+    display: flex;
+    justify-content: center;
+    text-align: center;
 }
