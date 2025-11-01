@@ -34,10 +34,12 @@ function WeatherCard() {
         const fetchDefaultWeather = async () => {
             ``;
             const weatherData = await getWeatherData('London');
+            if (weatherData.error) setError(weatherData.error);
+            else setData(weatherData);
             setData(weatherData);
         };
 
-            fetchDefaultWeather();
+        fetchDefaultWeather();
     }, []);
 
     return (
@@ -49,13 +51,18 @@ function WeatherCard() {
                         <h2>{dayjs().format('dddd')}</h2>
                         <p>{dayjs().format('DD MMM YYYY')}</p>
                         <p className='location'>
-                            📍 {data.name}, {data.country}
+                            📍 {data.name} {data.country}
                         </p>
                     </div>
 
                     <div className='temp-info'>
                         <div className='icon'>☀️</div>
-                        <h1>{data.temperature.toFixed(1)}°C</h1>
+                        <h1>
+                            {data.temperature
+                                ? data.temperature.toFixed(2)
+                                : '--'}
+                            °C
+                        </h1>
                         <p>{data.weather}</p>
                     </div>
                 </div>
