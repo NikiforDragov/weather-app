@@ -8,6 +8,7 @@ function WeatherCard() {
     const [location, setLocation] = useState('');
     const [showChangeLocation, setShowChangeLocation] = useState(false);
     const [error, setError] = useState('');
+    const [showError, setShowError] = useState(true);
 
     const changeLocation = (e) => {
         e.preventDefault();
@@ -42,9 +43,14 @@ function WeatherCard() {
         fetchDefaultWeather();
     }, []);
 
+    const handleShowError = (e) => {
+        e.preventDefault();
+        if (!showError) setShowError(true);
+        else setShowError(false);
+    };
+
     return (
         <>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
             <div className='weather-card'>
                 <div className='left'>
                     <div className='date-info'>
@@ -59,7 +65,7 @@ function WeatherCard() {
                         <div className='icon'>☀️</div>
                         <h1>
                             {data.temperature
-                                ? data.temperature.toFixed(2)
+                                ? data.temperature.toFixed(1)
                                 : '--'}
                             °C
                         </h1>
@@ -76,7 +82,12 @@ function WeatherCard() {
                             <strong>WIND</strong> {data.wind} km/h
                         </p>
                     </div>
-
+                    {error && showError && (
+                        <div className='error-box'>
+                            ⚠️ {error}
+                            <button onClick={handleShowError}>X</button>
+                        </div>
+                    )}
                     <button
                         className='change-location'
                         onClick={changeLocation}
