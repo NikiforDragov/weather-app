@@ -22,6 +22,7 @@ function WeatherCard() {
         const weatherData = await getWeatherData(location);
         if (weatherData.error) {
             setError(weatherData.error);
+            setShowError(true);
             setData({});
             setLocation('');
         } else {
@@ -35,8 +36,10 @@ function WeatherCard() {
         const fetchDefaultWeather = async () => {
             ``;
             const weatherData = await getWeatherData('London');
-            if (weatherData.error) setError(weatherData.error);
-            else setData(weatherData);
+            if (weatherData.error) {
+                setError(weatherData.error);
+                setShowError(true);
+            } else setData(weatherData);
             setData(weatherData);
         };
 
@@ -85,7 +88,12 @@ function WeatherCard() {
                     {error && showError && (
                         <div className='error-box'>
                             ⚠️ {error}
-                            <button onClick={handleShowError}>X</button>
+                            <button
+                                className='hide-error-button'
+                                onClick={handleShowError}
+                            >
+                                x
+                            </button>
                         </div>
                     )}
                     <button
