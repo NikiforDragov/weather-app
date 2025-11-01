@@ -105,11 +105,12 @@ function WeatherCard() {
                     {showChangeLocation && (
                         <div className='modal'>
                             <input
+                                className='location-input'
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                                 placeholder='Enter city...'
                             />
-                            <button onClick={searchLocation}>Search</button>
+                            <button className='search-button' onClick={searchLocation}>Search</button>
                         </div>
                     )}
                 </div>
