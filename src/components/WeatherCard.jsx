@@ -7,6 +7,7 @@ function WeatherCard() {
     const [data, setData] = useState({});
     const [location, setLocation] = useState('');
     const [showChangeLocation, setShowChangeLocation] = useState(false);
+    const [error, setError] = useState('');
 
     const changeLocation = (e) => {
         e.preventDefault();
@@ -16,10 +17,17 @@ function WeatherCard() {
     };
 
     const searchLocation = async () => {
+        setError('');
         const weatherData = await getWeatherData(location);
-        setData(weatherData);
-        setLocation('');
-        setShowChangeLocation(false);
+        if (weatherData.error) {
+            setError(weatherData.error);
+            setData({});
+            setLocation('');
+        } else {
+            setData(weatherData);
+            setLocation('');
+            setShowChangeLocation(false);
+        }
     };
 
     useEffect(() => {
@@ -35,67 +43,54 @@ function WeatherCard() {
     }, [data]);
 
     return (
-        <div className='weather-card'>
-            <div className='left'>
-                <div className='date-info'>
-                    <h2>{dayjs().format('dddd')}</h2>
-                    <p>{dayjs().format('DD MMM YYYY')}</p>
-                    <p className='location'>
-                        📍 {data.name}, {data.country}
-                    </p>
+        <>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <div className='weather-card'>
+                <div className='left'>
+                    <div className='date-info'>
+                        <h2>{dayjs().format('dddd')}</h2>
+                        <p>{dayjs().format('DD MMM YYYY')}</p>
+                        <p className='location'>
+                            📍 {data.name}, {data.country}
+                        </p>
+                    </div>
+
+                    <div className='temp-info'>
+                        <div className='icon'>☀️</div>
+                        <h1>{data.temperature.toFixed(1)}°C</h1>
+                        <p>{data.weather}</p>
+                    </div>
                 </div>
 
-                <div className='temp-info'>
-                    <div className='icon'>☀️</div>
-                    <h1>{data.temperature}°C</h1>
-                    <p>{data.weather}</p>
+                <div className='right'>
+                    <div className='stats'>
+                        <p>
+                            <strong>HUMIDITY</strong> {data.humidity}%
+                        </p>
+                        <p>
+                            <strong>WIND</strong> {data.wind} km/h
+                        </p>
+                    </div>
+
+                    <button
+                        className='change-location'
+                        onClick={changeLocation}
+                    >
+                        📍 Change Location
+                    </button>
+                    {showChangeLocation && (
+                        <div className='modal'>
+                            <input
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                                placeholder='Enter city...'
+                            />
+                            <button onClick={searchLocation}>Search</button>
+                        </div>
+                    )}
                 </div>
             </div>
-
-            <div className='right'>
-                <div className='stats'>
-                    <p>
-                        <strong>HUMIDITY</strong> {data.humidity}%
-                    </p>
-                    <p>
-                        <strong>WIND</strong> {data.wind} km/h
-                    </p>
-                </div>
-
-                <div className='forecast'>
-                    <div className='day active'>
-                        <p>Tue</p>
-                        <span>30°C</span>
-                    </div>
-                    <div className='day'>
-                        <p>Wed</p>
-                        <span>22°C</span>
-                    </div>
-                    <div className='day'>
-                        <p>Thu</p>
-                        <span>6°C</span>
-                    </div>
-                    <div className='day'>
-                        <p>Fri</p>
-                        <span>26°C</span>
-                    </div>
-                </div>
-
-                <button className='change-location' onClick={changeLocation}>
-                    📍 Change Location
-                </button>
-                {showChangeLocation && (
-                    <div className='modal'>
-                        <input
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                            placeholder='Enter city...'
-                        />
-                        <button onClick={searchLocation}>Search</button>
-                    </div>
-                )}
-            </div>
-        </div>
+        </>
     );
 }
 
