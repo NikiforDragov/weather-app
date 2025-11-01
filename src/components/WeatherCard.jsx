@@ -37,10 +37,8 @@ function WeatherCard() {
             setData(weatherData);
         };
 
-        if (Object.keys(data).length === 0) {
             fetchDefaultWeather();
-        }
-    }, [data]);
+    }, []);
 
     return (
         <>
