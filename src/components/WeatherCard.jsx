@@ -55,9 +55,6 @@ function WeatherCard() {
             <div className='right'>
                 <div className='stats'>
                     <p>
-                        <strong>PRECIPITATION</strong> 0%
-                    </p>
-                    <p>
                         <strong>HUMIDITY</strong> {data.humidity}%
                     </p>
                     <p>
